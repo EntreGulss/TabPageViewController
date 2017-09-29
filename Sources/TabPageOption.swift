@@ -28,6 +28,7 @@ public struct TabPageOption {
     public var tabWidth: CGFloat?
     public var currentBarHeight: CGFloat = 30.0
     public var isCurrentBarRoundedCorner: Bool = true
+    public var isCurrentBarChangeSizeAnimated: Bool = false
     public var tabBackgroundColor = UIColor.white
     public var pageBackgoundColor = UIColor.white
     public var isTranslucent: Bool = true
