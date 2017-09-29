@@ -34,7 +34,14 @@ internal class TabView: UIView {
 
     @IBOutlet var contentView: UIView!
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
-    @IBOutlet fileprivate weak var currentBarView: UIView!
+    @IBOutlet fileprivate weak var currentBarView: UIView! {
+        didSet {
+            if option.isCurrentBarRoundedCorner {
+                currentBarView.layer.cornerRadius = option.currentBarHeight / 2.0
+                currentBarView.clipsToBounds = true
+            }
+        }
+    }
     @IBOutlet fileprivate weak var currentBarViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet fileprivate weak var currentBarViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet fileprivate weak var bottomBarViewHeightConstraint: NSLayoutConstraint!
@@ -89,7 +96,7 @@ internal class TabView: UIView {
 
         collectionView.scrollsToTop = false
 
-        currentBarView.backgroundColor = option.currentColor
+        currentBarView.backgroundColor = option.currentBarColor
         currentBarViewHeightConstraint.constant = option.currentBarHeight
         if !isInfinity {
             currentBarView.removeFromSuperview()

@@ -10,7 +10,7 @@ import UIKit
 
 class TabCollectionCell: UICollectionViewCell {
 
-    var tabItemButtonPressedBlock: ((Void) -> Void)?
+    var tabItemButtonPressedBlock: (() -> Void)?
     var option: TabPageOption = TabPageOption() {
         didSet {
             currentBarViewHeightConstraint.constant = option.currentBarHeight
@@ -31,13 +31,20 @@ class TabCollectionCell: UICollectionViewCell {
             } else {
                 unHighlightTitle()
             }
-            currentBarView.backgroundColor = option.currentColor
+            currentBarView.backgroundColor = option.currentBarColor
             layoutIfNeeded()
         }
     }
 
     @IBOutlet fileprivate weak var itemLabel: UILabel!
-    @IBOutlet fileprivate weak var currentBarView: UIView!
+    @IBOutlet fileprivate weak var currentBarView: UIView! {
+        didSet {
+            if option.isCurrentBarRoundedCorner {
+                currentBarView.layer.cornerRadius = option.currentBarHeight / 2.0
+                currentBarView.clipsToBounds = true
+            }
+        }
+    }
     @IBOutlet fileprivate weak var currentBarViewHeightConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
@@ -84,12 +91,12 @@ extension TabCollectionCell {
     }
 
     func highlightTitle() {
-        itemLabel.textColor = option.currentColor
+        itemLabel.textColor = option.currentTextColor
         itemLabel.font = UIFont.boldSystemFont(ofSize: option.fontSize)
     }
 
     func unHighlightTitle() {
-        itemLabel.textColor = option.defaultColor
+        itemLabel.textColor = option.defaultTextColor
         itemLabel.font = UIFont.systemFont(ofSize: option.fontSize)
     }
 }
