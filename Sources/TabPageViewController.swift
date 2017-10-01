@@ -86,6 +86,7 @@ public extension TabPageViewController {
         let completion: ((Bool) -> Void) = { [weak self] _ in
             self?.shouldScrollCurrentBar = true
             self?.beforeIndex = index
+            self?.tabView.updateIsTransitionAnimating(false)
         }
 
         setViewControllers(
@@ -95,6 +96,7 @@ public extension TabPageViewController {
             completion: completion)
 
         guard isViewLoaded else { return }
+        tabView.updateIsTransitionAnimating(true)
         tabView.updateCurrentIndex(index, shouldScroll: true)
     }
 }

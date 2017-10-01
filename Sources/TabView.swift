@@ -31,6 +31,7 @@ internal class TabView: UIView {
     fileprivate var cellForSize: TabCollectionCell!
     fileprivate var cachedCellSizes: [IndexPath: CGSize] = [:]
     fileprivate var currentBarViewLeftConstraint: NSLayoutConstraint?
+    fileprivate(set) var isTransitionAnimating: Bool = false
 
     @IBOutlet var contentView: UIView!
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
@@ -288,6 +289,15 @@ extension TabView {
     }
 
     /**
+     Update the state of UIPageViewController transition
+
+     - parameter animating: UIPageViewControllerが画面遷移中かどうか
+     */
+    func updateIsTransitionAnimating(_ animating: Bool) {
+        isTransitionAnimating = animating
+    }
+
+    /**
      Update all of the cells in the display to the unselected state
      */
     fileprivate func deselectVisibleCells() {
@@ -319,6 +329,8 @@ extension TabView: UICollectionViewDataSource {
         cell.option = option
         cell.isCurrent = fixedIndex == (currentIndex % pageTabItemsCount)
         cell.tabItemButtonPressedBlock = { [weak self, weak cell] in
+            guard self?.isTransitionAnimating == false else { return }
+
             var direction: UIPageViewControllerNavigationDirection = .forward
             if let pageTabItemsCount = self?.pageTabItemsCount, let currentIndex = self?.currentIndex {
                 if self?.isInfinity == true {
